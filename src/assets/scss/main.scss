@@ -1,0 +1,54 @@
+$main-color: #596d86;
+
+html {
+  background-color: $main-color;
+}
+  
+body {
+  color: #fff;
+}
+
+html, body, #app {
+  height: 100%;
+}
+  
+a {
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+}
+
+ul {
+  padding-left: 15px;
+  li {
+    list-style: disc;
+    margin-bottom: 5px;
+  }
+}
+
+.box {
+
+  a {
+    color: $main-color;
+  
+    &:hover {
+      color: $main-color;
+      text-decoration: underline;
+    }
+  }
+}
+
+.is-fixed-box {
+  min-height: 620px;
+}
+
+@font-face {
+  font-family: 'adam';
+  src: url('adam-bold-webfont.woff2') format('woff2'),
+       url('adam-bold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
