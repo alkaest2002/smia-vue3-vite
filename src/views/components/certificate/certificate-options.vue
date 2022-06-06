@@ -6,7 +6,7 @@
     </p>
     <p class="mt-4">Scegli il tipo di documento da richiedere:</p>
     <ul class="mt-5">
-      <li v-for="opt of options" :key="opt">
+      <li v-for="opt of Object.keys(currentStepData)" :key="opt">
         <a href="#" @click.prevent="onClickOption(opt)">{{ opt }}</a>
       </li>
     </ul>
@@ -21,34 +21,19 @@ export default {
 
 <script setup>
 /* eslint-disable no-unused-vars */
-import { ref } from "vue";
 
 const props = defineProps({
-  choice: {
+  currentStepData: {
     type: Object,
     required: true,
-  },
-
-  content: {
-    type: String,
-    default: "",
   },
 });
 
 const emit = defineEmits({
-  "update:choice": Object,
+  "update-path": String,
 });
 
-const options = ref([
-  "Primo conseguimento",
-  "Rinnovo documento",
-  "Duplicato documento",
-]);
-
-const onClickOption = (option) => {
-  emit("update:choice", {
-    type: "option",
-    value: option,
-  });
+const onClickOption = (typeOfCertificate) => {
+  emit("update-path", typeOfCertificate);
 };
 </script>

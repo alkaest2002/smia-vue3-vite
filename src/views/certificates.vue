@@ -7,13 +7,13 @@
           <p class="is-size-4 has-text-weight-bold mb-5">{{ title }}</p>
           <transition name="fade" mode="out-in">
             <component
-              :is="components[step]"
-              v-model:choice="choice"
-              :content="content"
+              :is="currentComponent"
+              :current-step-data="currentStepData"
               class="mb-6"
+              @update-path="onUpdatePath"
             />
           </transition>
-          <div v-show="showBackButton" id="back">
+          <div v-show="path.length" id="back">
             <button
               id="back-button"
               class="button is-success"
@@ -35,71 +35,28 @@ export default {
 </script>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { certificatesData } from "@/data/certificates-data";
 import certificateStart from "./components/certificate/certificate-start.vue";
 import certificateOptions from "./components/certificate/certificate-options.vue";
 import certificateContent from "./components/certificate/certificate-content.vue";
 
-const components = {
-  certificateStart, certificateOptions, certificateContent
-};
-
-// ref step
-let step = ref("certificateStart");
-
-// ref choice
-const choice = ref({});
-
-// ref path
 const path = ref([]);
 
-// computed title
-const title = computed(
-  () =>
-    path.value.reduce((acc, itr) => {
-      acc = acc.length > 0 ? acc + " - " + itr.value : itr.value;
-      return acc;
-    }, "") || "Certificati"
-);
+const currentStepData = computed(() => path.value.reduce((acc, itr) => acc = acc[itr], { ...certificatesData }));
 
-// computed content
-const content = computed(() => {
-  // clone path
-  const clonedPath = [...path.value];
-  // get data from json
-  let data = clonedPath.reduce((acc, itr) => {
-    acc = acc ? acc[itr.value] : certificatesData[itr.value];
-    return acc;
-  }, null);
-  // return data or empry string
-  return data?.content || "";
+const title = computed(() => ["Certificati", ...path.value].join(" - "));
+
+const currentComponent = computed(() => {
+  if (path.value.length == 0) return certificateStart;
+  if (Object.keys(currentStepData.value).length > 1)
+    return certificateOptions;
+  return certificateContent;
 });
 
-// computed show back button
-const showBackButton = computed(() => step.value != "certificateStart");
+const onUpdatePath = (newSegment) => path.value.push(newSegment)
 
-// watch choice
-watch(choice, (choiceValue) => {
-  // get value
-  const { value } = choiceValue;
-  // compute step in path
-  const toPath = { ...choiceValue, step: step.value };
-  // add step to path
-  path.value = [...path.value, toPath];
-  // if value is patent*
-  if (/patent[ei]/i.test(value)) return (step.value = "certificateOptions");
-  // set component
-  step.value = "certificateContent";
-});
-
-// handle on click back
-const onClickBack = () => {
-  // get last element
-  const spliced = path.value.splice(-1, 1)[0];
-  // set component
-  step.value = spliced.step;
-};
+const onClickBack = () => path.value.splice(-1, 1);
 </script>
 
 <style lang="scss" scoped>

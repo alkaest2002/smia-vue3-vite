@@ -1,22 +1,15 @@
 <template>
-  <div v-html="content" />
+  <div v-html="currentStepData.content" />
 </template>
 
 <script>
 export default {
-  // name
   name: "CertificateContent",
 
-  // props
   props: {
-    choice: {
+    currentStepData: {
       type: Object,
       required: true,
-    },
-
-    content: {
-      type: String,
-      default: "",
     },
   },
 };

@@ -14,45 +14,26 @@
 </template>
 
 <script>
+
 export default {
   name: "CertificateStart",
 }
 </script>
 
 <script setup>
-/* eslint-disable no-unused-vars */
-import { ref } from "vue";
-
 const props = defineProps({
-  choice: {
+  currentStepData: {
     type: Object,
     required: true,
-  },
-
-  content: {
-    type: String,
-    default: "",
   },
 });
 
 const emit = defineEmits({
-  "update:choice": Object,
+  "update-path": String,
 });
 
-const certificates = ref([
-  "Patente CIG",
-  "Patente A",
-  "Patente B",
-  "Altre patenti",
-  "Sport",
-  "Volo",
-  "Armi",
-  "Altri certificati",
-]);
+const certificates = Object.keys(props.currentStepData);
 
 const onClickCertificate = (typeOfCertificate) => 
-  emit("update:choice", {
-    type: "choice",
-    value: typeOfCertificate,
-  });
+  emit("update-path", typeOfCertificate);
 </script>
