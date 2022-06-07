@@ -7,9 +7,7 @@
       >
         <app-hero />
         <div class="mt-0">
-          <p><em>medicina &middot; medicina legale &middot; psichiatria</em></p>
-          <p class="mt-5">Guidonia 00012 RM</p>
-          <p>prenotazioni <app-phone /></p>
+          <app-address />
         </div>
       </div>
     </div>
