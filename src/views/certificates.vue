@@ -8,6 +8,7 @@
           <transition name="fade" mode="out-in">
             <component
               :is="currentComponent"
+              :key="path.join('-')"
               :current-step-data="currentStepData"
               class="mb-6"
               @update-path="onUpdatePath"
@@ -37,7 +38,6 @@ export default {
 <script setup>
 import { ref, computed } from "vue";
 import { certificatesData } from "@/data/certificates-data";
-import certificateStart from "./components/certificate/certificate-start.vue";
 import certificateOptions from "./components/certificate/certificate-options.vue";
 import certificateContent from "./components/certificate/certificate-content.vue";
 
@@ -47,12 +47,11 @@ const currentStepData = computed(() => path.value.reduce((acc, itr) => acc = acc
 
 const title = computed(() => ["Certificati", ...path.value].join(" - "));
 
-const currentComponent = computed(() => {
-  if (path.value.length == 0) return certificateStart;
-  if (Object.keys(currentStepData.value).length > 1)
-    return certificateOptions;
-  return certificateContent;
-});
+const currentComponent = computed(() =>
+  Object.keys(currentStepData.value).length === 1 
+    ? certificateContent 
+    : certificateOptions
+);
 
 const onUpdatePath = (newSegment) => path.value.push(newSegment)
 
